@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Pizza in Teglia 75% - Calcolatore Avanzato</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    max-width: 650px;
+    margin: 40px auto;
+    padding: 16px;
+  }
+  h1 { margin-bottom: 0.5rem; }
+  h2 { margin-top: 1.5rem; }
+  label {
+    font-weight: 600;
+    display: block;
+    margin-top: 1.2rem;
+  }
+  input {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 1.2rem;
+    padding: 10px 16px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #222;
+    color: #fff;
+  }
+  hr { margin: 24px 0; }
+  .results {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Pizza in Teglia – Idratazione 75%</h1>
+<p>
+  Puoi calcolare le dosi partendo dalla <strong>farina</strong> oppure dal
+  <strong>numero di panetti</strong> da 650 g.<br>
+  In modalità panetti, la farina viene arrotondata in eccesso alla decina superiore
+  (es. 2188,6 g → 2190 g) e gli ingredienti sono arrotondati al grammo.
+</p>
+
+<hr>
+
+<h2>Modalità 1 – Calcolo dalla farina</h2>
+
+<label>Farina (g)</label>
+<input type="number" id="flour" placeholder="Es. 1000" min="1">
+
+<button onclick="calcFromFlour()">Calcola da farina</button>
+
+<hr>
+
+<h2>Modalità 2 – Calcolo dai panetti</h2>
+
+<label>Numero panetti (650 g ciascuno)</label>
+<input type="number" id="balls" placeholder="Es. 3" min="1">
+
+<button onclick="calcFromBalls()">Calcola da panetti</button>
+
+<div id="results" class="results" style="display:none;">
+  <h2>Risultati</h2>
+
+  <p><strong>Farina necessaria:</strong> <span id="outFlour"></span> g</p>
+
+  <h3>Acqua</h3>
+  <p><strong>Totale (75%):</strong> <span id="outWater"></span> g</p>
+  <p><strong>Acqua iniziale (65%):</strong> <span id="outWater65"></span> g</p>
+  <p><strong>Acqua da aggiungere dopo (35%):</strong> <span id="outWater35"></span> g</p>
+
+  <h3>Ingredienti</h3>
+  <p><strong>Sale (2.5%):</strong> <span id="outSalt"></span> g</p>
+  <p><strong>Lievito fresco (0.70%):</strong> <span id="outYeast"></span> g</p>
+
+  <h3>Peso finale impasto</h3>
+  <p><strong>Totale:</strong> <span id="outDough"></span> g</p>
+
+  <h3>Panetti</h3>
+  <p><strong>Panetti da 650 g:</strong> <span id="outBalls"></span></p>
+</div>
+
+<script>
+// Arrotondamento "morbido" per la visualizzazione con 1 decimale (lo usiamo solo se serve)
+function round(v) {
+  return Math.round(v * 10) / 10;
+}
+
+// Arrotonda al grammo per gli ingredienti (sotto .5 difetto, sopra .5 eccesso)
+function roundIngredient(v) {
+  return Math.round(v);
+}
+
+// Arrotonda in eccesso alla decina superiore (es. 2188.6 -> 2190)
+function ceil10(v) {
+  return Math.ceil(v / 10) * 10;
+}
+
+// Calcolo ingredienti partendo dalla farina
+function compute(F) {
+  const water = F * 0.75;
+  const salt = F * 0.025;
+  const yeast = F * 0.007;
+  const dough = F + water + salt + yeast;
+
+  return {
+    F: F,
+    water: water,
+    water65: water * 0.65,
+    water35: water * 0.35,
+    salt: salt,
+    yeast: yeast,
+    dough: dough
+  };
+}
+
+// Modalità 1: Calcolo dalla farina
+function calcFromFlour() {
+  const F = parseFloat(document.getElementById("flour").value);
+  if (!F || F <= 0) {
+    alert("Inserisci una quantità valida di farina.");
+    return;
+  }
+
+  const r = compute(F);
+  // Qui ha senso calcolare i panetti automaticamente dal peso dell'impasto
+  r.balls = Math.floor(r.dough / 650);
+
+  print(r);
+}
+
+// Modalità 2: Calcolo dal numero di panetti
+function calcFromBalls() {
+  const B = parseInt(document.getElementById("balls").value);
+  if (!B || B <= 0) {
+    alert("Inserisci un numero valido di panetti.");
+    return;
+  }
+
+  const totalDough = B * 650;
+
+  // Farina calcolata in base al peso totale, poi arrotondata in eccesso alla decina superiore
+  let F = totalDough / 1.782;
+  F = ceil10(F);
+
+  const r = compute(F);
+  r.balls = B; // Mostriamo il numero di panetti richiesto
+
+  print(r);
+}
+
+// Output dei risultati
+function print(r) {
+  // Farina: già "pulita" (soprattutto in modalità panetti)
+  document.getElementById("outFlour").textContent = round(r.F);
+
+  // Ingredienti arrotondati al grammo
+  document.getElementById("outWater").textContent    = roundIngredient(r.water);
+  document.getElementById("outWater65").textContent  = roundIngredient(r.water65);
+  document.getElementById("outWater35").textContent  = roundIngredient(r.water35);
+  document.getElementById("outSalt").textContent     = roundIngredient(r.salt);
+  document.getElementById("outYeast").textContent    = roundIngredient(r.yeast);
+  document.getElementById("outDough").textContent    = roundIngredient(r.dough);
+
+  document.getElementById("outBalls").textContent    = r.balls;
+
+  document.getElementById("results").style.display = "block";
+}
+</script>
+
+</body>
+</html>
