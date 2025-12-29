@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Focaccia Genovese (Rocchi)</title>
+
+<style>
+body{
+  font-family: system-ui, sans-serif;
+  max-width:720px;
+  margin:40px auto;
+  padding:16px;
+}
+h1{margin-bottom:.4rem}
+h2{margin-top:2rem}
+label{font-weight:600;display:block;margin-top:1.2rem}
+input{width:100%;padding:8px;font-size:1rem;box-sizing:border-box}
+button{
+  margin-top:1.4rem;
+  padding:10px 16px;
+  font-size:1rem;
+  border:none;
+  border-radius:6px;
+  background:#222;
+  color:#fff;
+  cursor:pointer;
+}
+.results{
+  background:#f5f5f5;
+  padding:20px;
+  border-radius:8px;
+  margin-top:28px;
+}
+hr{margin:28px 0}
+.step{margin-bottom:1.4rem}
+.step-title{font-weight:700;margin-bottom:.25rem}
+.step-body{line-height:1.45}
+.note{font-size:.95rem;line-height:1.4;margin-top:10px}
+.pill{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#e9e9e9;
+  font-size:.95rem;
+  margin-top:8px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Focaccia Genovese (Rocchi)</h1>
+<p>
+Ricetta originale Rocchi – dose base <strong>2 focacce</strong> (teglia 30×40).<br>
+Le dosi dell’impasto scalano; il lievito è controllato.
+</p>
+
+<label>Numero focacce</label>
+<input type="number" id="nFocacce" min="1" step="1" placeholder="Es. 2">
+
+<button onclick="calc()">Calcola</button>
+
+<div id="results" class="results" style="display:none">
+
+  <h2>Porzionatura</h2>
+  <p><strong>Numero focacce:</strong> <span id="outN"></span></p>
+  <p><strong>Peso stimato per focaccia:</strong> <span id="outDoughPer"></span> g</p>
+  <div class="pill">Teglia di riferimento: 30×40 cm</div>
+
+  <hr>
+
+  <h2>Ingredienti impasto</h2>
+  <p><strong>Farina totale:</strong> <span id="fTot"></span> g</p>
+  <p>Farina 00 (W=280): <span id="f00"></span> g</p>
+  <p>Farina Manitoba (W=400): <span id="fMan"></span> g</p>
+
+  <hr>
+
+  <p>Acqua: <span id="water"></span> g</p>
+  <p>Sale: <span id="salt"></span> g</p>
+  <p>Malto: <span id="malt"></span> g</p>
+  <p><strong>Lievito fresco:</strong> <span id="yeast"></span> g</p>
+  <p>Olio EVO: <span id="oil"></span> g</p>
+
+  <p class="note">
+    Nota: il lievito non scala in modo proporzionale per evitare fermentazioni eccessive.
+  </p>
+
+  <hr>
+
+  <h2>Gestione acqua impasto</h2>
+  <ul>
+    <li>¾ acqua: <strong><span id="w75"></span> g</strong></li>
+    <li>¼ acqua: <strong><span id="w25"></span> g</strong></li>
+  </ul>
+
+  <hr>
+
+  <h2>Procedimento (Rocchi)</h2>
+
+  <div class="step">
+    <div class="step-title">1️⃣ Miscelare le farine</div>
+    <div class="step-body">
+      Miscelare <strong><span id="f00b"></span> g</strong> di farina 00 e
+      <strong><span id="fManb"></span> g</strong> di Manitoba.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">2️⃣ Aggiungere ¾ di acqua</div>
+    <div class="step-body">
+      Aggiungere <strong><span id="w75b"></span> g</strong> di acqua a temperatura ambiente e mescolare.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">3️⃣ Malto + sale</div>
+    <div class="step-body">
+      Aggiungere <strong><span id="maltb"></span> g</strong> di malto e
+      <strong><span id="saltb"></span> g</strong> di sale. Mescolare.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">4️⃣ Aggiungere la rimanente acqua</div>
+    <div class="step-body">
+      Aggiungere <strong><span id="w25b"></span> g</strong> di acqua e amalgamare.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">5️⃣ Aggiungere il lievito</div>
+    <div class="step-body">
+      Aggiungere <strong><span id="yeastb"></span> g</strong> di lievito fresco e impastare fino a incorporare tutta la farina.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">6️⃣ Aggiungere l’olio</div>
+    <div class="step-body">
+      Aggiungere <strong><span id="oilb"></span> g</strong> di olio EVO.
+      Impastare fino a impasto liscio.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">7️⃣ Panetti e piega</div>
+    <div class="step-body">
+      Dividere in <strong><span id="nb"></span></strong> panetti (uno per teglia).
+      Piega a 3. Riposo coperto: <strong>30 min</strong>.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">8️⃣ Prima stesura</div>
+    <div class="step-body">
+      Ungere la teglia al centro, stendere l’impasto.
+      Riposo: <strong>30 min</strong>.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">9️⃣ Stesura in teglia</div>
+    <div class="step-body">
+      Stirare in teglia. Riposo: <strong>60 min</strong>.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">🔟 Buchi + salamoia</div>
+    <div class="step-body">
+      Per <strong>ogni focaccia</strong>:<br>
+      – Sciogliere <strong>5 g di sale</strong> in <strong>100 g di acqua</strong>.<br>
+      – Tenere a parte <strong>30 g di olio</strong>.<br><br>
+      Fare i buchi, versare l’olio al centro e distribuire insieme alla salamoia.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">1️⃣1️⃣ Attesa finale</div>
+    <div class="step-body">
+      <strong>45 minuti</strong> a temperatura ambiente, senza coprire.
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">1️⃣2️⃣ Cottura</div>
+    <div class="step-body">
+      Forno statico <strong>230 °C</strong> per <strong>15 minuti</strong>.
+      A fine cottura, spennellare con olio EVO.
+    </div>
+  </div>
+
+</div>
+
+<script>
+function r(v){return Math.round(v)}
+
+function calc(){
+  const n=parseInt(document.getElementById("nFocacce").value,10)
+  if(!n||n<=0){alert("Numero non valido");return}
+
+  const base=2
+  const k=n/base
+
+  const f00=400*k
+  const fMan=250*k
+  const fTot=f00+fMan
+
+  const water=335*k
+  const salt=13*k
+  const malt=10*k
+  const oil=30*k
+
+  const yeast=18*Math.sqrt(k)
+
+  const doughTot=fTot+water+salt+malt+yeast+oil
+  const doughPer=doughTot/n
+
+  const w75=water*0.75
+  const w25=water*0.25
+
+  document.getElementById("outN").textContent=n
+  document.getElementById("outDoughPer").textContent=r(doughPer)
+
+  document.getElementById("fTot").textContent=r(fTot)
+  document.getElementById("f00").textContent=r(f00)
+  document.getElementById("fMan").textContent=r(fMan)
+
+  document.getElementById("water").textContent=r(water)
+  document.getElementById("salt").textContent=r(salt)
+  document.getElementById("malt").textContent=r(malt)
+  document.getElementById("yeast").textContent=r(yeast)
+  document.getElementById("oil").textContent=r(oil)
+
+  document.getElementById("w75").textContent=r(w75)
+  document.getElementById("w25").textContent=r(w25)
+
+  document.getElementById("f00b").textContent=r(f00)
+  document.getElementById("fManb").textContent=r(fMan)
+  document.getElementById("w75b").textContent=r(w75)
+  document.getElementById("w25b").textContent=r(w25)
+  document.getElementById("maltb").textContent=r(malt)
+  document.getElementById("saltb").textContent=r(salt)
+  document.getElementById("yeastb").textContent=r(yeast)
+  document.getElementById("oilb").textContent=r(oil)
+  document.getElementById("nb").textContent=n
+
+  document.getElementById("results").style.display="block"
+}
+</script>
+
+</body>
+</html>
